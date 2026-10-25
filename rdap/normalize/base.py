@@ -154,7 +154,9 @@ class Handler:
         contacts = sorted(contacts, key=lambda x: (x.name or "", x.email or ""))
 
         for _contact in contacts:
-            key = f"{_contact.name}"
+            # merge on name plus a distinguishing channel so that same-name
+            # contacts with distinct contact details are kept separate
+            key = f"{_contact.name}|{_contact.phone or _contact.email or ''}"
 
             if key in combined_contacts:
                 combined_contacts[key].roles.extend(_contact.roles)
