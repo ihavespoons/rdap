@@ -1,4 +1,5 @@
 import pytest
+import requests_mock
 
 from rdap import client
 from rdap.exceptions import RdapHTTPError
@@ -21,14 +22,17 @@ def test_strip_auth():
     assert url == client.strip_auth(url + "&apikey=12345")
 
 
-@pytest.mark.skip(
-    "this no longer raises a http error, need to investigate changes on their end",
-)
 def test_lacnic_bad_apikey():
-    rdapc = client.RdapClient({"lacnic_apikey": "12345"})
-    with pytest.raises(RdapHTTPError) as excinfo:
-        rdapc.get_asn(28001).parsed()
+    url = "https://rdap.lacnic.net/rdap/autnum/28001"
+    rdapc = client.RdapClient({"lacnic_apikey": "12345",
+                               "bootstrap_url": "https://rdap.lacnic.net/rdap"})
+    with requests_mock.Mocker() as mock:
+        mock.get(url, status_code=400)
+        with pytest.raises(RdapHTTPError) as excinfo:
+            rdapc.get_asn(28001)
+        assert mock.last_request.qs["apikey"] == ["12345"]
     assert "returned 400" in str(excinfo.value)
+    assert "12345" not in str(excinfo.value)
 
 
 @pytest.mark.network
