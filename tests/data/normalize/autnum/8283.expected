@@ -223,11 +223,20 @@
       "roles": [
         "abuse",
         "admin",
-        "registrant",
         "technical"
       ],
       "phone": "+31 6 51387718",
       "email": "abuse@coloclue.net"
+    },
+    {
+      "created": null,
+      "updated": null,
+      "name": "Netwerkvereniging Coloclue",
+      "roles": [
+        "registrant"
+      ],
+      "phone": "+31 6 51387718",
+      "email": "ops@coloclue.net"
     },
     {
       "created": null,
