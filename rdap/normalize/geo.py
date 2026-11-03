@@ -91,12 +91,8 @@ def normalize(formatted_address: str, date: datetime = None, client=None) -> Loc
     floor = None
     suite = None
 
-    address_components = result.get("address_components", [])
-    print("Address components:", address_components)
-
     for component in result.get("address_components", []):
         types = component.get("types", [])
-        print("Component:", component)
         if "country" in types:
             country = component.get("short_name")
 
